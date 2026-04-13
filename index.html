@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Student Leave Portal — Malik Deenar Islamic Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --blue:#1565C0;--blue-dark:#0D47A1;--blue-mid:#1976D2;--blue-light:#1E88E5;
+  --blue-pale:#E8F0FE;--blue-glow:rgba(21,101,192,0.12);
+  --bg:#F4F7FB;--bg2:#FFFFFF;--bg3:#EBF1F9;--bg4:#D6E4F5;
+  --text:#0A1929;--text-dim:#5A7080;--text-mid:#1A3550;
+  --green:#1A7A42;--green-bg:#E8F5EE;--green-border:#9DD4B3;
+  --yellow:#7A5800;--yellow-bg:#FEF8E1;--yellow-border:#EDD580;
+  --red:#C0392B;--red-bg:#FDECEC;--red-border:#F4AAAA;
+  --border:#D0DCE8;--border-mid:#AABDD4;
+  --radius:12px;--radius-lg:18px;
+  --shadow:0 2px 14px rgba(21,101,192,0.08);
+  --shadow-lg:0 8px 40px rgba(21,101,192,0.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg3)}
+::-webkit-scrollbar-thumb{background:var(--blue-mid);border-radius:5px}
+
+/* ══ HEADER ══ */
+header{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:stretch;
+    box-shadow:0 3px 20px rgba(13,71,161,0.4);
+  min-height:64px;
+}
+.hdr-brand{
+  display:flex;align-items:center;
+  padding:0 32px 0 28px;
+  background:var(--blue-dark);
+  
+  flex-shrink:0;gap:0;
+}
+.hdr-wordmark .wm-top{
+  font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;
+  color:#fff;letter-spacing:.2px;line-height:1.2;display:block;
+}
+.hdr-wordmark .wm-bot{
+  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;
+  color:rgba(255,255,255,0.45);letter-spacing:3px;text-transform:uppercase;
+  margin-top:3px;display:block;
+}
+.hdr-right-bar{
+  flex:1;display:flex;align-items:center;justify-content:flex-end;
+  gap:10px;padding:0 24px;
+    background:var(--blue-dark);
+    width: 80%;
+  
+}
+.live-pill{
+  display:none;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);
+  border-radius:20px;padding:5px 13px;font-size:11px;font-weight:700;
+  color:#fff;letter-spacing:.3px;
+}
+.live-pill.show{display:flex}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4AE08C;flex-shrink:0;animation:pdot 2s infinite}
+#hdr-logout{
+  display:none;background:rgba(255,255,255,0.1);
+  border:1.5px solid rgba(255,255,255,0.22);
+  color:rgba(255,255,255,0.85);padding:7px 16px;border-radius:8px;
+  font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;
+  font-family:'Montserrat',sans-serif;transition:all .2s;text-transform:uppercase;
+}
+#hdr-logout.show{display:block}
+#hdr-logout:hover{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+
+/* ══ MAIN ══ */
+main{max-width:960px;margin:0 auto;padding:30px 18px 80px}
+.screen{display:none}
+.screen.active{display:block;animation:fadeUp .4s ease}
+#screen-login.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:74vh}
+
+/* ══ LOGIN ══ */
+.login-card{
+  width:100%;max-width:420px;background:#fff;
+  border:1.5px solid var(--border);border-radius:var(--radius-lg);
+  padding:44px 38px;box-shadow:var(--shadow-lg);text-align:center;
+}
+.login-emblem{
+  width:72px;height:72px;border-radius:18px;margin:0 auto 22px;
+  background:linear-gradient(135deg,var(--blue-dark),var(--blue-light));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 22px rgba(21,101,192,0.32);
+}
+.login-emblem-text{
+  font-family:'Montserrat',sans-serif;font-weight:900;
+  font-size:18px;color:#fff;letter-spacing:1px;
+}
+.login-card h2{
+  font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;
+  color:var(--blue-dark);margin-bottom:5px;letter-spacing:-.3px;
+}
+.login-card .sub{font-size:12px;color:var(--text-dim);margin-bottom:28px;line-height:1.7;font-weight:500}
+
+/* ══ FIELDS ══ */
+.field{margin-bottom:14px;text-align:left}
+.field label{display:block;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;font-weight:700}
+.field input,.field select,.field textarea{
+  width:100%;background:#fff;border:1.5px solid var(--border);
+  border-radius:9px;color:var(--text);font-family:'Montserrat',sans-serif;
+  font-size:13px;font-weight:500;padding:11px 13px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow)}
+.field select option{background:#fff;color:var(--text)}
+.field textarea{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+
+/* ══ BUTTONS ══ */
+.btn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 20px;border-radius:9px;border:none;cursor:pointer;
+  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.8px;text-transform:uppercase;transition:all .22s;
+}
+.btn-blue{background:linear-gradient(135deg,var(--blue-dark),var(--blue-light));color:#fff;box-shadow:0 3px 14px rgba(21,101,192,0.28)}
+.btn-blue:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 22px rgba(21,101,192,0.38)}
+.btn-blue:disabled{background:var(--bg3);color:var(--text-dim);cursor:not-allowed;box-shadow:none;border:1.5px dashed var(--border)}
+.btn-sm{width:auto;padding:8px 16px;font-size:11px;border-radius:7px}
+
+/* ══ STUDENT CARD ══ */
+.student-card{
+  background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);
+  padding:22px 24px;display:flex;align-items:center;gap:18px;margin-bottom:22px;
+  box-shadow:var(--shadow);border-left:5px solid var(--blue-mid);
+}
+.avatar{
+  width:54px;height:54px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue-dark),var(--blue-light));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Montserrat',sans-serif;font-size:20px;font-weight:900;color:#fff;
+  box-shadow:0 3px 12px rgba(21,101,192,0.28);
+}
+.student-card-info{flex:1;min-width:0}
+.student-card-info h3{font-family:'Montserrat',sans-serif;font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.2px}
+.student-card-info .meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:10px;color:var(--text-dim);background:var(--bg3);padding:3px 10px;border-radius:20px;border:1px solid var(--border);font-weight:700;letter-spacing:.3px}
+.status-badge{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.sb-approved{background:var(--green-bg);color:var(--green);border:1.5px solid var(--green-border)}
+.sb-pending{background:var(--yellow-bg);color:var(--yellow);border:1.5px solid var(--yellow-border)}
+.sb-none{background:var(--bg3);color:var(--text-dim);border:1.5px solid var(--border)}
+
+/* ══ STATS ══ */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{
+  background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:18px 14px;text-align:center;transition:border-color .2s,box-shadow .2s;box-shadow:var(--shadow);
+}
+.stat-card:hover{border-color:var(--blue-mid);box-shadow:0 4px 20px rgba(21,101,192,0.1)}
+.stat-card .sv{font-family:'Montserrat',sans-serif;font-size:28px;font-weight:900;color:var(--blue-mid);display:block;letter-spacing:-1px}
+.stat-card .sl{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-top:5px;font-weight:700}
+.stat-card.s-ok .sv{color:var(--green)}
+.stat-card.s-warn .sv{color:var(--yellow)}
+.stat-card.s-bad{border-color:var(--red-border);background:var(--red-bg)}
+.stat-card.s-bad .sv{color:var(--red)}
+
+/* ══ TABS ══ */
+.tabs{display:flex;gap:3px;background:var(--bg3);border-radius:var(--radius);padding:4px;margin-bottom:22px;border:1.5px solid var(--border)}
+.tab-btn{flex:1;padding:9px 8px;border-radius:9px;border:none;background:transparent;cursor:pointer;color:var(--text-dim);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;transition:all .2s}
+.tab-btn.on{background:var(--blue-mid);color:#fff;box-shadow:0 2px 10px rgba(21,101,192,0.25)}
+.tab-btn:hover:not(.on){color:var(--blue);background:rgba(255,255,255,0.6)}
+.tab-panel{display:none}.tab-panel.on{display:block;animation:fadeUp .3s ease}
+
+/* ══ SECTION TITLE ══ */
+.section-title{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:var(--text-mid);text-transform:uppercase;letter-spacing:1.2px;border-bottom:1.5px solid var(--border);padding-bottom:10px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+
+/* ══ BLOCK BANNER ══ */
+.block-banner{display:none;align-items:center;gap:10px;background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:9px;padding:13px 16px;color:var(--red);font-size:12px;margin-bottom:18px;font-weight:700}
+.block-banner.show{display:flex}
+
+/* ══ FORM CARD ══ */
+.form-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:26px 24px;box-shadow:var(--shadow)}
+
+/* ══ DURATION BOX ══ */
+.duration-box{background:var(--blue-pale);border:1.5px solid var(--bg4);border-radius:9px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:16px}
+.dur-val{font-family:'Montserrat',sans-serif;font-size:26px;font-weight:900;color:var(--blue-dark);letter-spacing:-1px;white-space:nowrap}
+.dur-lbl{font-size:11px;color:var(--text-dim);line-height:1.7;font-weight:500}
+
+/* ══ HISTORY TABLE ══ */
+.history-box{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:var(--blue-dark)}
+thead th{padding:12px 14px;text-align:left;font-family:'Montserrat',sans-serif;font-size:9.5px;color:rgba(255,255,255,0.75);letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;font-weight:700}
+tbody tr{border-bottom:1px solid var(--border);transition:background .13s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--blue-pale)}
+tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:500}
+
+/* ══ TAGS ══ */
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;font-family:'Montserrat',sans-serif}
+.t-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.t-yellow{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
+.t-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.t-grey{background:var(--bg3);color:var(--text-dim);border:1px solid var(--border)}
+
+/* ══ ACTIVE LEAVE CARD ══ */
+.active-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:14px;box-shadow:var(--shadow)}
+.active-card.approved{border-left:5px solid var(--green)}
+.active-card.pending{border-left:5px solid var(--yellow)}
+.active-card-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.active-card-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;font-size:12px}
+@media(max-width:600px){.active-card-meta{grid-template-columns:repeat(2,1fr)}}
+.meta-box{background:var(--bg3);border-radius:8px;padding:10px 12px;border:1px solid var(--border)}
+.meta-box .mb-lbl{font-size:9px;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.meta-box .mb-val{color:var(--text);font-weight:700;font-size:12px}
+.reason-box{margin-top:12px;font-size:12px;color:var(--text-dim);font-style:italic;padding:11px 14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);line-height:1.6;font-weight:500}
+
+/* ══ EMPTY STATE ══ */
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-dim);font-size:13px;font-weight:500}
+.empty-state .ei{font-size:36px;margin-bottom:10px;display:block}
+
+/* ══ LOADER ══ */
+#loader{display:none;position:fixed;inset:0;z-index:999;background:rgba(244,247,251,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+#loader.show{display:flex}
+.spinner{width:44px;height:44px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--blue-mid);animation:spin .7s linear infinite}
+
+/* ══ TOAST ══ */
+#toast{position:fixed;bottom:22px;right:22px;z-index:9999;padding:13px 20px;border-radius:9px;font-size:12px;font-weight:700;letter-spacing:.3px;box-shadow:0 8px 28px rgba(0,0,0,0.15);transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:300px;font-family:'Montserrat',sans-serif}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.success{background:var(--green);color:#fff}
+#toast.error{background:var(--red);color:#fff}
+#toast.info{background:var(--blue-mid);color:#fff}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pdot{0%{box-shadow:0 0 0 0 rgba(74,224,140,.6)}70%{box-shadow:0 0 0 8px rgba(74,224,140,0)}100%{box-shadow:0 0 0 0 rgba(74,224,140,0)}}
+
+@media(max-width:640px){
+  .hdr-brand{padding:0 16px}
+  .hdr-right-bar{padding:0 14px}
+  .hdr-wordmark .wm-top{font-size:13px}
+  .student-card{flex-direction:column;align-items:flex-start;gap:12px}
+  .status-badge{align-self:flex-start}
+}
+@media(max-width:380px){
+  .hdr-wordmark .wm-bot{display:none}
+  .hdr-wordmark .wm-top{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="hdr-brand">
+    <div class="hdr-wordmark">
+      <span class="wm-top">Malik Deenar Islamic Academy</span>
+      <span class="wm-bot">Student Leave Portal</span>
+    </div>
+  </div>
+  <div class="hdr-right-bar">
+    <div class="live-pill" id="live-pill">
+      <div class="live-dot"></div><span>Live</span>
+    </div>
+    <button id="hdr-logout" onclick="logout()">Sign Out</button>
+  </div>
+</header>
+
+<main>
+  <!-- LOGIN -->
+  <div class="screen active" id="screen-login">
+    <div class="login-card">
+      <div class="login-emblem">
+        <div class="login-emblem-text">MD</div>
+      </div>
+      <h2>Student Login</h2>
+      <p class="sub">Enter your Admission Number to access your leave dashboard</p>
+      <div class="field">
+        <label>Admission Number</label>
+        <input type="text" id="login-adno" placeholder="e.g. 788" inputmode="numeric"
+          onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <button class="btn btn-blue" onclick="doLogin()">View Dashboard →</button>
+      <p style="font-size:11px;color:var(--text-dim);margin-top:16px;line-height:1.6;font-weight:500">
+        Enter your admission number exactly as registered
+      </p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="screen" id="screen-dashboard">
+
+    <div class="student-card">
+      <div class="avatar" id="stu-avatar">?</div>
+      <div class="student-card-info">
+        <h3 id="stu-name">—</h3>
+        <div class="meta">
+          <span class="chip" id="stu-adno">Ad No: —</span>
+          <span class="chip" id="stu-class">Class: —</span>
+        </div>
+      </div>
+      <div class="status-badge sb-none" id="stu-status">No Active Leave</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card s-ok">
+        <span class="sv" id="stat-official">0</span>
+        <div class="sl">🏛 Official</div>
+      </div>
+      <div class="stat-card">
+        <span class="sv" id="stat-medical">0</span>
+        <div class="sl">🏥 Medical</div>
+      </div>
+      <div class="stat-card" id="unoff-card">
+        <span class="sv" id="stat-unofficial">0</span>
+        <div class="sl">⚠️ Unofficial</div>
+      </div>
+      <div class="stat-card">
+        <span class="sv" id="stat-total">0</span>
+        <div class="sl">📊 Total</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchTab('apply',this)">✍️ Apply</button>
+      <button class="tab-btn"   onclick="switchTab('history',this)">📋 History</button>
+      <button class="tab-btn"   onclick="switchTab('status',this)">📌 Active</button>
+    </div>
+
+    <!-- TAB: APPLY -->
+    <div class="tab-panel on" id="tab-apply">
+      <div class="block-banner" id="block-banner">
+        <span style="font-size:18px">🚫</span>
+        <span id="block-reason">You cannot apply for leave at this time.</span>
+      </div>
+      <div class="form-card">
+        <div class="section-title">📝 New Leave Application</div>
+        <div class="field">
+          <label>Place / Location</label>
+          <input type="text" id="f-place" placeholder="Where are you going?"/>
+        </div>
+        <div class="field">
+          <label>Reason</label>
+          <textarea id="f-reason" placeholder="Describe your reason for leave..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>From Date &amp; Time</label>
+            <input type="datetime-local" id="f-from_datetime" onchange="updateDays()"/>
+          </div>
+          <div class="field">
+            <label>To Date &amp; Time</label>
+            <input type="datetime-local" id="f-to_datetime" onchange="updateDays()"/>
+          </div>
+        </div>
+        <div class="duration-box">
+          <div class="dur-val" id="f-days">—</div>
+          <div class="dur-lbl">Calculated duration<br>AM: 07:30–07:50 &nbsp;·&nbsp; PM: 13:40–14:10</div>
+        </div>
+        <button class="btn btn-blue" id="apply-btn" onclick="submitLeave()">
+          ✅ Submit Leave Application
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB: HISTORY -->
+    <div class="tab-panel" id="tab-history">
+      <div class="history-box">
+        <div class="section-title" style="padding:14px 16px 12px;border-bottom:1.5px solid var(--border);margin-bottom:0;background:var(--bg3)">
+          📋 Leave Records <span class="live-dot" style="margin-left:auto"></span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Type</th><th>Place</th><th>From</th><th>To</th><th>Duration</th><th>Status</th></tr>
+            </thead>
+            <tbody id="history-body">
+              <tr><td colspan="7"><div class="empty-state"><span class="ei">⏳</span>Loading...</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: ACTIVE -->
+    <div class="tab-panel" id="tab-status">
+      <div id="active-status-wrap">
+        <div class="empty-state"><span class="ei">⏳</span><p>Loading...</p></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="loader"><div class="spinner"></div></div>
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, getDocs, setDoc, updateDoc,
+  collection, query, where, orderBy,
+  onSnapshot, serverTimestamp, increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyDmO5EaJjDOnvmxtoHX_czjhDyU01BjYZg",
+  authDomain:"leave-portal-e3234.firebaseapp.com",
+  projectId:"leave-portal-e3234",
+  storageBucket:"leave-portal-e3234.firebasestorage.app",
+  messagingSenderId:"431358369719",
+  appId:"1:431358369719:web:49664e46dbc4de9c53d232",
+  measurementId:"G-V704ZLDZLP"
+});
+const db = getFirestore(app);
+
+let student=null, unsub=null, allLeaves=[];
+const $=id=>document.getElementById(id);
+const showLoader=()=>$('loader').classList.add('show');
+const hideLoader=()=>$('loader').classList.remove('show');
+
+function dispNum(v){
+  const n=+(v||0);
+  if(n===0)return '0';
+  return n%1===0?String(n):n.toFixed(1);
+}
+
+window.toast=(msg,type='info',ms=3200)=>{
+  const t=$('toast');t.textContent=msg;t.className=`show ${type}`;
+  setTimeout(()=>t.className='',ms);
+};
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
+  const el=$(id);
+  el.style.display=(id==='screen-login')?'flex':'block';
+  el.classList.add('active');
+}
+
+window.doLogin=async()=>{
+  const adno=$('login-adno').value.trim();
+  if(!adno){toast('Please enter your admission number','error');return;}
+  showLoader();
+  try{
+    const snap=await getDoc(doc(db,'students',adno));
+    if(!snap.exists()){toast('No student found with Ad No: '+adno,'error');hideLoader();return;}
+    student={id:adno,...snap.data()};
+    renderStudentCard();startListener();
+    showScreen('screen-dashboard');
+    $('hdr-logout').classList.add('show');
+    $('live-pill').classList.add('show');
+    setMinDate();
+    toast('Welcome, '+student.name+'! 👋','success');
+  }catch(e){console.error(e);toast('Connection error. Please check internet.','error');}
+  hideLoader();
+};
+
+function renderStudentCard(){
+  const s=student;
+  $('stu-name').textContent=s.name||'—';
+  $('stu-adno').textContent='Ad No: '+(s.adno||s.id);
+  $('stu-class').textContent='Class: '+(s.class||'—');
+  $('stu-avatar').textContent=(s.name||'?').charAt(0).toUpperCase();
+  const off=+(s.total_official||0),med=+(s.total_medical||0),unoff=+(s.total_unofficial||0);
+  $('stat-official').textContent=dispNum(off);
+  $('stat-medical').textContent=dispNum(med);
+  $('stat-unofficial').textContent=dispNum(unoff);
+  $('stat-total').textContent=dispNum(off+med+unoff);
+  const uc=$('unoff-card');uc.className='stat-card';
+  if(unoff>=10)uc.classList.add('s-bad');
+  else if(unoff>=7)uc.classList.add('s-warn');
+  else uc.classList.add('s-ok');
+}
+
+function normalizeLeave(d){
+  const r=d.data()||{};
+  const from=r.from_datetime||r.from||'';
+  const to=r.to_datetime||r.to||'';
+  return {
+    id:d.id,...r,
+    from_datetime:from,to_datetime:to,
+    leave_type:r.leave_type||r.leaveType||'unofficial',
+    place:r.place||r.destination||'—',
+    days:r.days!=null?r.days:calcDays(from,to),
+    status:(r.status||'pending').toString().trim(),
+  };
+}
+
+function startListener(){
+  if(unsub){unsub();unsub=null;}
+  const q=query(collection(db,'leave_requests'),where('adNo','==',student.id),orderBy('createdAt','desc'));
+  unsub=onSnapshot(q,snap=>{allLeaves=snap.docs.map(normalizeLeave);refreshUI();},()=>fallback());
+}
+function fallback(){
+  const q=query(collection(db,'leave_requests'),where('adNo','==',student.id));
+  unsub=onSnapshot(q,snap=>{
+    allLeaves=snap.docs.map(normalizeLeave).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    refreshUI();
+  });
+}
+function refreshUI(){updateStatusBadge();checkBlock();renderHistory();renderActiveStatus();}
+
+function updateStatusBadge(){
+  const badge=$('stu-status');
+  const approved=allLeaves.find(l=>l.status==='approved');
+  const pending=allLeaves.find(l=>l.status==='pending');
+  badge.className='status-badge';
+  if(approved){badge.textContent='✅ On Leave';badge.classList.add('sb-approved');}
+  else if(pending){badge.textContent='⏳ Pending';badge.classList.add('sb-pending');}
+  else{badge.textContent='No Active Leave';badge.classList.add('sb-none');}
+}
+
+function checkBlock(){
+  const unoff=+(student.total_unofficial||0);
+  const hasApproved=allLeaves.some(l=>l.status==='approved');
+  const hasPending=allLeaves.some(l=>l.status==='pending');
+  const banner=$('block-banner'),btn=$('apply-btn');
+  if(unoff>=10){
+    banner.classList.add('show');
+    $('block-reason').textContent=`You have ${dispNum(unoff)} unofficial leaves. Blocked after 10.`;
+    btn.disabled=true;return;
+  }
+  if(hasApproved){
+    banner.classList.add('show');
+    $('block-reason').textContent='You have an approved leave not yet completed. Please wait.';
+    btn.disabled=true;return;
+  }
+  if(hasPending){
+    banner.classList.add('show');
+    $('block-reason').textContent='You have a pending request. Wait for admin decision first.';
+    btn.disabled=true;return;
+  }
+  banner.classList.remove('show');btn.disabled=false;
+}
+
+function renderHistory(){
+  const tbody=$('history-body');
+  if(!allLeaves.length){
+    tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><span class="ei">📋</span><p>No leave records yet.</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML=allLeaves.map((l,i)=>{
+    const d=calcDays(l.from_datetime,l.to_datetime);
+    const type=l.leave_type||'unofficial';
+    const icon=type==='medical'?'🏥':type==='official'?'🏛':'🏠';
+    return `<tr>
+      <td style="color:var(--text-dim);font-weight:700">${i+1}</td>
+      <td style="font-weight:600">${icon} ${cap(type)}</td>
+      <td>${l.place||'—'}</td>
+      <td style="white-space:nowrap;color:var(--text-dim)">${fmtDate(l.from_datetime)}</td>
+      <td style="white-space:nowrap;color:var(--text-dim)">${fmtDate(l.to_datetime)}</td>
+      <td>
+        <span style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:900;color:var(--blue-mid)">${dispNum(d)}</span>
+        <span style="color:var(--text-dim);font-size:10px;font-weight:600"> day${d!==1?'s':''}</span>
+      </td>
+      <td>${statusTag(l.status)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderActiveStatus(){
+  const wrap=$('active-status-wrap');
+  const active=allLeaves.filter(l=>l.status==='approved'||l.status==='pending');
+  if(!active.length){
+    wrap.innerHTML=`<div class="empty-state"><span class="ei">✅</span><p>No active or pending leaves.</p></div>`;
+    return;
+  }
+  wrap.innerHTML=active.map(l=>{
+    const d=calcDays(l.from_datetime,l.to_datetime);
+    const type=l.leave_type||'unofficial';
+    const tIcon=type==='medical'?'🏥':type==='official'?'🏛':'🏠';
+    const isApproved=l.status==='approved';
+    const accentColor=isApproved?'var(--green)':'var(--yellow)';
+    return `
+    <div class="active-card ${isApproved?'approved':'pending'}">
+      <div class="active-card-header">
+        <span style="font-size:24px">${isApproved?'✅':'⏳'}</span>
+        <div style="flex:1">
+          <div style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;color:${accentColor}">${cap(l.status)} Leave</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-weight:600">${tIcon} ${cap(type)} &nbsp;·&nbsp; Applied ${fmtTs(l.createdAt)}</div>
+        </div>
+        <div>${statusTag(l.status)}</div>
+      </div>
+      <div class="active-card-meta">
+        <div class="meta-box"><div class="mb-lbl">📍 Place</div><div class="mb-val">${l.place||'—'}</div></div>
+        <div class="meta-box"><div class="mb-lbl">📅 From</div><div class="mb-val">${fmtDate(l.from_datetime)}</div></div>
+        <div class="meta-box"><div class="mb-lbl">📅 To</div><div class="mb-val">${fmtDate(l.to_datetime)}</div></div>
+        <div class="meta-box">
+          <div class="mb-lbl">⏱ Duration</div>
+          <div class="mb-val" style="color:var(--blue-mid);font-family:'Montserrat',sans-serif;font-size:20px;font-weight:900;letter-spacing:-0.5px">
+            ${dispNum(d)}<span style="font-size:11px;font-weight:600;color:var(--text-dim)"> day${d!==1?'s':''}</span>
+          </div>
+        </div>
+      </div>
+      ${l.reason?`<div class="reason-box">"${l.reason}"</div>`:''}
+      ${isApproved?`<div style="margin-top:14px;display:flex;justify-content:flex-end"><button class="btn btn-blue btn-sm" onclick="openExtendLeave('${l.id}')">🔁 Extend Leave</button></div>`:''}
+    </div>`;
+  }).join('');
+}
+
+window.submitLeave=async()=>{
+  const place=$('f-place').value.trim(),reason=$('f-reason').value.trim();
+  const from=$('f-from_datetime').value,to=$('f-to_datetime').value;
+  if(!place){toast('Please enter place / location','error');return;}
+  if(!reason){toast('Please enter reason for leave','error');return;}
+  if(!from){toast('Please select From date and time','error');return;}
+  if(!to){toast('Please select To date and time','error');return;}
+  if(new Date(to)<new Date(from)){toast('To cannot be before From','error');return;}
+  const overlap=allLeaves.some(l=>{
+    if(l.status==='completed'||l.status==='rejected')return false;
+    return !(new Date(to)<new Date(l.from_datetime)||new Date(from)>new Date(l.to_datetime));
+  });
+  if(overlap){toast('Dates overlap with an existing leave','error');return;}
+  showLoader();
+  try{
+    const requestId=await getNextRequestId();
+    const days=calcDays(from,to);
+    await setDoc(doc(db,'leave_requests',requestId),{
+      adNo:student.id,name:student.name,class:student.class,adno:student.id,
+      leave_type:'unofficial',place,reason,
+      from_datetime:from,to_datetime:to,days,
+      status:'pending',lateDays:0,createdAt:serverTimestamp(),requestId
+    });
+    toast('Leave application submitted! ✅','success');
+    $('f-place').value='';$('f-reason').value='';
+    $('f-from_datetime').value='';$('f-to_datetime').value='';
+    $('f-days').textContent='—';
+  }catch(e){console.error(e);toast('Failed to submit. Try again.','error');}
+  hideLoader();
+};
+
+window.openExtendLeave=async(docId)=>{
+  const leave=allLeaves.find(l=>l.id===docId);if(!leave)return;
+  const currentTo=leave.to_datetime||'';
+  const newTo=prompt(`Extend leave\nCurrent To: ${currentTo}\nNew To (YYYY-MM-DDTHH:MM):`);
+  if(!newTo)return;
+  const newToDate=new Date(newTo);
+  if(isNaN(newToDate.getTime())){toast('Invalid datetime format','error');return;}
+  if(newToDate<=new Date(leave.from_datetime)){toast('New To must be after From','error');return;}
+  if(newToDate<=new Date(currentTo)){toast('New To must be later than current To','error');return;}
+  const reason=prompt('Reason for extension:');
+  if(!reason){toast('Extension reason required','error');return;}
+  const oldDays=calcDays(leave.from_datetime,leave.to_datetime);
+  const extDays=calcDays(leave.from_datetime,newTo);
+  const extra=extDays-oldDays;
+  const lt=leave.leave_type||'unofficial';
+  const field=lt==='medical'?'total_medical':lt==='official'?'total_official':'total_unofficial';
+  const updReason=leave.reason?`${leave.reason} | Extension: ${reason}`:reason;
+  showLoader();
+  try{
+    await updateDoc(doc(db,'leave_requests',docId),{to_datetime:newTo,reason:updReason,days:extDays});
+    if(extra>0){
+      await updateDoc(doc(db,'students',student.id),{[field]:increment(extra)});
+      student[field]=+(student[field]||0)+extra;renderStudentCard();
+    }
+    toast('Leave extended!','success');
+  }catch(e){console.error(e);toast('Failed to extend leave','error');}
+  hideLoader();
+};
+
+async function getNextRequestId(){
+  const snap=await getDocs(collection(db,'leave_requests'));
+  const max=snap.docs.map(d=>parseInt(d.id,10)).filter(n=>!isNaN(n)).reduce((m,n)=>Math.max(m,n),0);
+  return String(max+1);
+}
+
+function setMinDate(){
+  const now=toLocalInput(new Date());
+  $('f-from_datetime').min=now;$('f-to_datetime').min=now;
+}
+function toLocalInput(v){
+  const d=new Date(v);const off=d.getTimezoneOffset();
+  return new Date(d.getTime()-off*60000).toISOString().slice(0,16);
+}
+window.updateDays=()=>{
+  const f=$('f-from_datetime').value,t=$('f-to_datetime').value;
+  const el=$('f-days');
+  if(f&&t&&new Date(t)>=new Date(f)){
+    const d=calcDays(f,t);el.textContent=dispNum(d)+' day'+(d!==1?'s':'');
+  }else{el.textContent='—';}
+};
+function calcDays(f,t){if(!f||!t)return 0;return calcHalfDays(f,t);}
+function calcHalfDays(f,t){
+  const s=new Date(f),e=new Date(t);
+  if(isNaN(s.getTime())||isNaN(e.getTime())||e<s)return 0;
+  let tot=0;
+  const cur=new Date(s);cur.setHours(0,0,0,0);
+  const last=new Date(e);last.setHours(0,0,0,0);
+  const ov=(a,b,c,d)=>a<d&&b>c;
+  while(cur<=last){
+    const mgf=new Date(cur);mgf.setHours(7,30,0,0);
+    const mgt=new Date(cur);mgt.setHours(7,50,0,0);
+    const agf=new Date(cur);agf.setHours(13,40,0,0);
+    const agt=new Date(cur);agt.setHours(14,10,0,0);
+    if(ov(s,e,mgf,mgt))tot+=0.5;
+    if(ov(s,e,agf,agt))tot+=0.5;
+    cur.setDate(cur.getDate()+1);
+  }
+  return tot;
+}
+function fmtDate(d){
+  if(!d)return '—';
+  const dt=new Date(d);if(isNaN(dt.getTime()))return '—';
+  const day=String(dt.getDate()).padStart(2,'0');
+  const mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][dt.getMonth()];
+  const h=String(dt.getHours()).padStart(2,'0');
+  const m=String(dt.getMinutes()).padStart(2,'0');
+  return `${day} ${mon} ${dt.getFullYear()} ${h}:${m}`;
+}
+function fmtTs(ts){
+  if(!ts)return '—';
+  const d=ts.toDate?ts.toDate():new Date(ts.seconds*1000);
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):'';}
+function statusTag(s){
+  const m={pending:['t-yellow','⏳ Pending'],approved:['t-green','✅ Approved'],completed:['t-grey','🏁 Completed'],rejected:['t-red','❌ Rejected']};
+  const[cls,label]=m[s]||['t-grey',cap(s)];
+  return `<span class="tag ${cls}">${label}</span>`;
+}
+
+window.switchTab=(tab,btn)=>{
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');$('tab-'+tab).classList.add('on');
+};
+
+window.logout=()=>{
+  if(unsub){unsub();unsub=null;}
+  student=null;allLeaves=[];
+  $('login-adno').value='';
+  $('hdr-logout').classList.remove('show');
+  $('live-pill').classList.remove('show');
+  showScreen('screen-login');
+  toast('Signed out','info');
+};
+</script>
+</body>
+</html>
