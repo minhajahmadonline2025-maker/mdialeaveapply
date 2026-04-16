@@ -14,6 +14,7 @@
   --green:#1A7A42;--green-bg:#E8F5EE;--green-border:#9DD4B3;
   --yellow:#7A5800;--yellow-bg:#FEF8E1;--yellow-border:#EDD580;
   --red:#C0392B;--red-bg:#FDECEC;--red-border:#F4AAAA;
+  --orange:#D35400;--orange-bg:#FFF3E0;--orange-border:#F5C28A;
   --border:#D0DCE8;--border-mid:#AABDD4;
   --radius:12px;--radius-lg:18px;
   --shadow:0 2px 14px rgba(21,101,192,0.08);
@@ -25,18 +26,16 @@ body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;
 ::-webkit-scrollbar-track{background:var(--bg3)}
 ::-webkit-scrollbar-thumb{background:var(--blue-mid);border-radius:5px}
 
-/* ══ HEADER ══ */
 header{
   position:sticky;top:0;z-index:50;
   display:flex;align-items:stretch;
-    box-shadow:0 3px 20px rgba(13,71,161,0.4);
+  box-shadow:0 3px 20px rgba(13,71,161,0.4);
   min-height:64px;
 }
 .hdr-brand{
   display:flex;align-items:center;
   padding:0 32px 0 28px;
   background:var(--blue-dark);
-  
   flex-shrink:0;gap:0;
 }
 .hdr-wordmark .wm-top{
@@ -51,9 +50,8 @@ header{
 .hdr-right-bar{
   flex:1;display:flex;align-items:center;justify-content:flex-end;
   gap:10px;padding:0 24px;
-    background:var(--blue-dark);
-    width: 80%;
-  
+  background:var(--blue-dark);
+  width:80%;
 }
 .live-pill{
   display:none;align-items:center;gap:6px;
@@ -73,13 +71,11 @@ header{
 #hdr-logout.show{display:block}
 #hdr-logout:hover{background:var(--red-bg);border-color:var(--red);color:var(--red)}
 
-/* ══ MAIN ══ */
-main{max-width:960px;margin:0 auto;padding:30px 18px 80px}
+main{max-width:1080px;margin:0 auto;padding:30px 18px 80px}
 .screen{display:none}
 .screen.active{display:block;animation:fadeUp .4s ease}
 #screen-login.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:74vh}
 
-/* ══ LOGIN ══ */
 .login-card{
   width:100%;max-width:420px;background:#fff;
   border:1.5px solid var(--border);border-radius:var(--radius-lg);
@@ -101,7 +97,6 @@ main{max-width:960px;margin:0 auto;padding:30px 18px 80px}
 }
 .login-card .sub{font-size:12px;color:var(--text-dim);margin-bottom:28px;line-height:1.7;font-weight:500}
 
-/* ══ FIELDS ══ */
 .field{margin-bottom:14px;text-align:left}
 .field label{display:block;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;font-weight:700}
 .field input,.field select,.field textarea{
@@ -116,7 +111,6 @@ main{max-width:960px;margin:0 auto;padding:30px 18px 80px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:500px){.form-row{grid-template-columns:1fr}}
 
-/* ══ BUTTONS ══ */
 .btn{
   width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
   padding:13px 20px;border-radius:9px;border:none;cursor:pointer;
@@ -128,7 +122,6 @@ main{max-width:960px;margin:0 auto;padding:30px 18px 80px}
 .btn-blue:disabled{background:var(--bg3);color:var(--text-dim);cursor:not-allowed;box-shadow:none;border:1.5px dashed var(--border)}
 .btn-sm{width:auto;padding:8px 16px;font-size:11px;border-radius:7px}
 
-/* ══ STUDENT CARD ══ */
 .student-card{
   background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);
   padding:22px 24px;display:flex;align-items:center;gap:18px;margin-bottom:22px;
@@ -150,7 +143,6 @@ main{max-width:960px;margin:0 auto;padding:30px 18px 80px}
 .sb-pending{background:var(--yellow-bg);color:var(--yellow);border:1.5px solid var(--yellow-border)}
 .sb-none{background:var(--bg3);color:var(--text-dim);border:1.5px solid var(--border)}
 
-/* ══ STATS ══ */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
 @media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
 .stat-card{
@@ -165,47 +157,40 @@ main{max-width:960px;margin:0 auto;padding:30px 18px 80px}
 .stat-card.s-bad{border-color:var(--red-border);background:var(--red-bg)}
 .stat-card.s-bad .sv{color:var(--red)}
 
-/* ══ TABS ══ */
 .tabs{display:flex;gap:3px;background:var(--bg3);border-radius:var(--radius);padding:4px;margin-bottom:22px;border:1.5px solid var(--border)}
 .tab-btn{flex:1;padding:9px 8px;border-radius:9px;border:none;background:transparent;cursor:pointer;color:var(--text-dim);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;transition:all .2s}
 .tab-btn.on{background:var(--blue-mid);color:#fff;box-shadow:0 2px 10px rgba(21,101,192,0.25)}
 .tab-btn:hover:not(.on){color:var(--blue);background:rgba(255,255,255,0.6)}
 .tab-panel{display:none}.tab-panel.on{display:block;animation:fadeUp .3s ease}
 
-/* ══ SECTION TITLE ══ */
 .section-title{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:var(--text-mid);text-transform:uppercase;letter-spacing:1.2px;border-bottom:1.5px solid var(--border);padding-bottom:10px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 
-/* ══ BLOCK BANNER ══ */
 .block-banner{display:none;align-items:center;gap:10px;background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:9px;padding:13px 16px;color:var(--red);font-size:12px;margin-bottom:18px;font-weight:700}
 .block-banner.show{display:flex}
 
-/* ══ FORM CARD ══ */
 .form-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:26px 24px;box-shadow:var(--shadow)}
 
-/* ══ DURATION BOX ══ */
 .duration-box{background:var(--blue-pale);border:1.5px solid var(--bg4);border-radius:9px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:16px}
 .dur-val{font-family:'Montserrat',sans-serif;font-size:26px;font-weight:900;color:var(--blue-dark);letter-spacing:-1px;white-space:nowrap}
 .dur-lbl{font-size:11px;color:var(--text-dim);line-height:1.7;font-weight:500}
 
-/* ══ HISTORY TABLE ══ */
 .history-box{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
 .table-scroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead{background:var(--blue-dark)}
-thead th{padding:12px 14px;text-align:left;font-family:'Montserrat',sans-serif;font-size:9.5px;color:rgba(255,255,255,0.75);letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;font-weight:700}
+thead th{padding:12px 13px;text-align:left;font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(255,255,255,0.75);letter-spacing:1.1px;text-transform:uppercase;white-space:nowrap;font-weight:700}
 tbody tr{border-bottom:1px solid var(--border);transition:background .13s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--blue-pale)}
-tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:500}
+tbody td{padding:11px 13px;color:var(--text);vertical-align:middle;font-weight:500}
 
-/* ══ TAGS ══ */
 .tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;font-family:'Montserrat',sans-serif}
 .t-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
 .t-yellow{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
 .t-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
 .t-grey{background:var(--bg3);color:var(--text-dim);border:1px solid var(--border)}
+.t-orange{background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-border)}
 
-/* ══ ACTIVE LEAVE CARD ══ */
 .active-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:14px;box-shadow:var(--shadow)}
 .active-card.approved{border-left:5px solid var(--green)}
 .active-card.pending{border-left:5px solid var(--yellow)}
@@ -217,21 +202,25 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
 .meta-box .mb-val{color:var(--text);font-weight:700;font-size:12px}
 .reason-box{margin-top:12px;font-size:12px;color:var(--text-dim);font-style:italic;padding:11px 14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);line-height:1.6;font-weight:500}
 
-/* ══ EMPTY STATE ══ */
 .empty-state{text-align:center;padding:48px 20px;color:var(--text-dim);font-size:13px;font-weight:500}
 .empty-state .ei{font-size:36px;margin-bottom:10px;display:block}
 
-/* ══ LOADER ══ */
 #loader{display:none;position:fixed;inset:0;z-index:999;background:rgba(244,247,251,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center}
 #loader.show{display:flex}
 .spinner{width:44px;height:44px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--blue-mid);animation:spin .7s linear infinite}
 
-/* ══ TOAST ══ */
 #toast{position:fixed;bottom:22px;right:22px;z-index:9999;padding:13px 20px;border-radius:9px;font-size:12px;font-weight:700;letter-spacing:.3px;box-shadow:0 8px 28px rgba(0,0,0,0.15);transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:300px;font-family:'Montserrat',sans-serif}
 #toast.show{transform:translateY(0);opacity:1}
 #toast.success{background:var(--green);color:#fff}
 #toast.error{background:var(--red);color:#fff}
 #toast.info{background:var(--blue-mid);color:#fff}
+
+.leave-id-cell{
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;
+  color:var(--blue-dark);background:var(--blue-pale);
+  padding:4px 10px;border-radius:6px;display:inline-block;
+  border:1px solid var(--bg4);letter-spacing:.3px;
+}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -252,7 +241,6 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
 </head>
 <body>
 
-<!-- ══ HEADER ══ -->
 <header>
   <div class="hdr-brand">
     <div class="hdr-wordmark">
@@ -279,7 +267,7 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
       <p class="sub">Enter your Admission Number to access your leave dashboard</p>
       <div class="field">
         <label>Admission Number</label>
-        <input type="text" id="login-adno" placeholder="e.g. 788" inputmode="numeric"
+        <input type="text" id="login-adno" placeholder="e.g. 100" inputmode="numeric"
           onkeydown="if(event.key==='Enter')doLogin()"/>
       </div>
       <button class="btn btn-blue" onclick="doLogin()">View Dashboard →</button>
@@ -357,7 +345,7 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
         </div>
         <div class="duration-box">
           <div class="dur-val" id="f-days">—</div>
-          <div class="dur-lbl">Calculated duration<br>AM: 07:30–07:50 &nbsp;·&nbsp; PM: 13:40–14:10</div>
+          <div class="dur-lbl">Calculated duration (Based on school timings)<br>AM: 07:30–07:50 &nbsp;·&nbsp; PM: 13:40–14:10</div>
         </div>
         <button class="btn btn-blue" id="apply-btn" onclick="submitLeave()">
           ✅ Submit Leave Application
@@ -374,10 +362,20 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
         <div class="table-scroll">
           <table>
             <thead>
-              <tr><th>#</th><th>Type</th><th>Place</th><th>From</th><th>To</th><th>Duration</th><th>Status</th></tr>
+              <tr>
+                <th>Leave ID</th>
+                <th>Type</th>
+                <th>Place</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Duration</th>
+                <th>Reached</th>
+                <th>Total Leave</th>
+                <th>Status</th>
+              </tr>
             </thead>
             <tbody id="history-body">
-              <tr><td colspan="7"><div class="empty-state"><span class="ei">⏳</span>Loading...</div></td></tr>
+              <tr><td colspan="9"><div class="empty-state"><span class="ei">⏳</span>Loading...</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -481,8 +479,11 @@ function normalizeLeave(d){
   return {
     id:d.id,...r,
     from_datetime:from,to_datetime:to,
+    reached_datetime:r.reached_datetime||r.reached||null,
     leave_type:r.leave_type||r.leaveType||'unofficial',
     place:r.place||r.destination||'—',
+    // Explicitly connect to leave_taken field from Firestore
+    leave_taken: r.leave_taken,
     days:r.days!=null?r.days:calcDays(from,to),
     status:(r.status||'pending').toString().trim(),
   };
@@ -535,26 +536,59 @@ function checkBlock(){
   banner.classList.remove('show');btn.disabled=false;
 }
 
+/* ═══════════════════════════════════════
+   HISTORY TABLE — Updated Order
+   ═══════════════════════════════════════ */
 function renderHistory(){
   const tbody=$('history-body');
   if(!allLeaves.length){
-    tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><span class="ei">📋</span><p>No leave records yet.</p></div></td></tr>`;
+    tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><span class="ei">📋</span><p>No leave records yet.</p></div></td></tr>`;
     return;
   }
-  tbody.innerHTML=allLeaves.map((l,i)=>{
-    const d=calcDays(l.from_datetime,l.to_datetime);
+  tbody.innerHTML=allLeaves.map((l)=>{
     const type=l.leave_type||'unofficial';
     const icon=type==='medical'?'🏥':type==='official'?'🏛':'🏠';
+
+    // Leave ID
+    const leaveId=l.requestId||l.id;
+
+    // Reached datetime
+    const reachedStr=l.reached_datetime?fmtDate(l.reached_datetime):'—';
+
+    // 1. Duration Logic: Centre btwn to and reached
+    let effectiveEnd = l.to_datetime;
+    if(l.reached_datetime){
+      const t1 = new Date(l.to_datetime).getTime();
+      const t2 = new Date(l.reached_datetime).getTime();
+      const mid = (t1 + t2) / 2;
+      effectiveEnd = new Date(mid).toISOString();
+    }
+    const d = calcDays(l.from_datetime, effectiveEnd);
+
+    // 2. Total Leave Logic: Connect with 'leave_taken' field from Firestore
+    // If leave_taken exists in database, show it. If null/undefined, fallback to calculated d.
+    const finalTotalLeave = l.leave_taken !== null && l.leave_taken !== undefined ? l.leave_taken : d;
+    const totalLeaveHtml = `<span style="font-weight:800;color:var(--text)">${dispNum(finalTotalLeave)}</span><span style="font-size:10px;color:var(--text-dim)"> days</span>`;
+
+    // NEW ORDER: Leave ID, Type, Place, From, To, Duration, Reached, Total Leave, Status
     return `<tr>
-      <td style="color:var(--text-dim);font-weight:700">${i+1}</td>
+      <td><span class="leave-id-cell">#${leaveId}</span></td>
       <td style="font-weight:600">${icon} ${cap(type)}</td>
       <td>${l.place||'—'}</td>
-      <td style="white-space:nowrap;color:var(--text-dim)">${fmtDate(l.from_datetime)}</td>
-      <td style="white-space:nowrap;color:var(--text-dim)">${fmtDate(l.to_datetime)}</td>
+      <td style="white-space:nowrap;color:var(--text-dim);font-size:11px">${fmtDate(l.from_datetime)}</td>
+      <td style="white-space:nowrap;color:var(--text-dim);font-size:11px">${fmtDate(l.to_datetime)}</td>
+      
+      <!-- Duration Column (Midpoint Logic) -->
       <td>
         <span style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:900;color:var(--blue-mid)">${dispNum(d)}</span>
         <span style="color:var(--text-dim);font-size:10px;font-weight:600"> day${d!==1?'s':''}</span>
       </td>
+
+      <td style="white-space:nowrap;font-size:11px;font-weight:600;color:${l.reached_datetime?'var(--text)':'var(--text-dim)'}">${reachedStr}</td>
+      
+      <!-- Total Leave Column (Connected to Firestore 'leave_taken') -->
+      <td>${totalLeaveHtml}</td>
+      
       <td>${statusTag(l.status)}</td>
     </tr>`;
   }).join('');
@@ -568,7 +602,14 @@ function renderActiveStatus(){
     return;
   }
   wrap.innerHTML=active.map(l=>{
-    const d=calcDays(l.from_datetime,l.to_datetime);
+    let effectiveEnd = l.to_datetime;
+    if(l.reached_datetime){
+      const t1 = new Date(l.to_datetime).getTime();
+      const t2 = new Date(l.reached_datetime).getTime();
+      effectiveEnd = new Date((t1 + t2) / 2).toISOString();
+    }
+    const d = calcDays(l.from_datetime, effectiveEnd);
+
     const type=l.leave_type||'unofficial';
     const tIcon=type==='medical'?'🏥':type==='official'?'🏛':'🏠';
     const isApproved=l.status==='approved';
@@ -681,6 +722,7 @@ window.updateDays=()=>{
     const d=calcDays(f,t);el.textContent=dispNum(d)+' day'+(d!==1?'s':'');
   }else{el.textContent='—';}
 };
+
 function calcDays(f,t){if(!f||!t)return 0;return calcHalfDays(f,t);}
 function calcHalfDays(f,t){
   const s=new Date(f),e=new Date(t);
@@ -690,16 +732,26 @@ function calcHalfDays(f,t){
   const last=new Date(e);last.setHours(0,0,0,0);
   const ov=(a,b,c,d)=>a<d&&b>c;
   while(cur<=last){
-    const mgf=new Date(cur);mgf.setHours(7,30,0,0);
-    const mgt=new Date(cur);mgt.setHours(7,50,0,0);
-    const agf=new Date(cur);agf.setHours(13,40,0,0);
-    const agt=new Date(cur);agt.setHours(14,10,0,0);
-    if(ov(s,e,mgf,mgt))tot+=0.5;
-    if(ov(s,e,agf,agt))tot+=0.5;
+    const day=cur.getDay();
+    let p1s,p1e,p2s,p2e;
+    if(day===5){
+      p1s=new Date(cur);p1s.setHours(0,0,0,0);
+      p1e=new Date(cur);p1e.setHours(0,20,0,0);
+      p2s=new Date(cur);p2s.setHours(19,30,0,0);
+      p2e=new Date(cur);p2e.setHours(19,50,0,0);
+    }else{
+      p1s=new Date(cur);p1s.setHours(7,30,0,0);
+      p1e=new Date(cur);p1e.setHours(7,50,0,0);
+      p2s=new Date(cur);p2s.setHours(13,40,0,0);
+      p2e=new Date(cur);p2e.setHours(14,10,0,0);
+    }
+    if(ov(s,e,p1s,p1e))tot+=0.5;
+    if(ov(s,e,p2s,p2e))tot+=0.5;
     cur.setDate(cur.getDate()+1);
   }
   return tot;
 }
+
 function fmtDate(d){
   if(!d)return '—';
   const dt=new Date(d);if(isNaN(dt.getTime()))return '—';
