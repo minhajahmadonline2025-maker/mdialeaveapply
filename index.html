@@ -490,11 +490,11 @@ function normalizeLeave(d){
 
 function startListener(){
   if(unsub){unsub();unsub=null;}
-  const q=query(collection(db,'leave_requests'),where('adNo','==',student.id),orderBy('createdAt','desc'));
+  const q=query(collection(db,'leaveRequests'),where('adNo','==',student.id),orderBy('createdAt','desc'));
   unsub=onSnapshot(q,snap=>{allLeaves=snap.docs.map(normalizeLeave);refreshUI();},()=>fallback());
 }
 function fallback(){
-  const q=query(collection(db,'leave_requests'),where('adNo','==',student.id));
+  const q=query(collection(db,'leaveRequests'),where('adNo','==',student.id));
   unsub=onSnapshot(q,snap=>{
     allLeaves=snap.docs.map(normalizeLeave).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     refreshUI();
@@ -657,7 +657,7 @@ window.submitLeave=async()=>{
   try{
     const requestId=await getNextRequestId();
     const days=calcDays(from,to);
-    await setDoc(doc(db,'leave_requests',requestId),{
+    await setDoc(doc(db,'leaveRequests',requestId),{
       adNo:student.id,name:student.name,class:student.class,adno:student.id,
       leave_type:'unofficial',place,reason,
       from_datetime:from,to_datetime:to,days,
@@ -690,7 +690,7 @@ window.openExtendLeave=async(docId)=>{
   const updReason=leave.reason?`${leave.reason} | Extension: ${reason}`:reason;
   showLoader();
   try{
-    await updateDoc(doc(db,'leave_requests',docId),{to_datetime:newTo,reason:updReason,days:extDays});
+    await updateDoc(doc(db,'leaveRequests',docId),{to_datetime:newTo,reason:updReason,days:extDays});
     if(extra>0){
       await updateDoc(doc(db,'students',student.id),{[field]:increment(extra)});
       student[field]=+(student[field]||0)+extra;renderStudentCard();
@@ -701,7 +701,7 @@ window.openExtendLeave=async(docId)=>{
 };
 
 async function getNextRequestId(){
-  const snap=await getDocs(collection(db,'leave_requests'));
+  const snap=await getDocs(collection(db,'leaveRequests'));
   const max=snap.docs.map(d=>parseInt(d.id,10)).filter(n=>!isNaN(n)).reduce((m,n)=>Math.max(m,n),0);
   return String(max+1);
 }
