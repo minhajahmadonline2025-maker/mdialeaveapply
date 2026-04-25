@@ -402,18 +402,21 @@ import {
   onSnapshot, serverTimestamp, increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// ── NEW FIREBASE PROJECT: leave-reports ──────────────────────────────────────
 const app = initializeApp({
-  apiKey:"AIzaSyDmO5EaJjDOnvmxtoHX_czjhDyU01BjYZg",
-  authDomain:"leave-portal-e3234.firebaseapp.com",
-  projectId:"leave-portal-e3234",
-  storageBucket:"leave-portal-e3234.firebasestorage.app",
-  messagingSenderId:"431358369719",
-  appId:"1:431358369719:web:49664e46dbc4de9c53d232",
-  measurementId:"G-V704ZLDZLP"
+  apiKey:            "AIzaSyACe-Wd7Lw18UqEJVFeFrM-Jw6Ml2Xbcws",
+  authDomain:        "leave-reports.firebaseapp.com",
+  projectId:         "leave-reports",
+  storageBucket:     "leave-reports.firebasestorage.app",
+  messagingSenderId: "542083419531",
+  appId:             "1:542083419531:web:2235f6d012cd194f0bf38e",
+  measurementId:     "G-6V8DSMTDGG"
 });
+// ─────────────────────────────────────────────────────────────────────────────
+
 const db = getFirestore(app);
 
-let student=null, unsub=null, allLeaves=[];
+let student=null, unsub=null, unsubStudent=null, allLeaves=[];
 const $=id=>document.getElementById(id);
 const showLoader=()=>$('loader').classList.add('show');
 const hideLoader=()=>$('loader').classList.remove('show');
@@ -460,11 +463,11 @@ function renderStudentCard(){
   $('stu-adno').textContent='Ad No: '+(s.adno||s.id);
   $('stu-class').textContent='Class: '+(s.class||'—');
   $('stu-avatar').textContent=(s.name||'?').charAt(0).toUpperCase();
-  const off=+(s.total_official||0),med=+(s.total_medical||0),unoff=+(s.total_unofficial||0);
+  const off=+(s.total_official||0),med=+(s.total_medical||0),unoff=+(s.total_unofficial||0),tot=+(s.total_leaves||0);
   $('stat-official').textContent=dispNum(off);
   $('stat-medical').textContent=dispNum(med);
   $('stat-unofficial').textContent=dispNum(unoff);
-  $('stat-total').textContent=dispNum(off+med+unoff);
+  $('stat-total').textContent=dispNum(tot);
   const uc=$('unoff-card');uc.className='stat-card';
   if(unoff>=10)uc.classList.add('s-bad');
   else if(unoff>=7)uc.classList.add('s-warn');
@@ -478,23 +481,40 @@ function normalizeLeave(d){
   return {
     id:d.id,...r,
     from_datetime:from,to_datetime:to,
-    reached_datetime:r.reached_datetime||r.reached||null,
+    reached_datetime:(()=>{
+      const rv=r.reached_datetime||r.reached||null;
+      if(!rv||rv===0||rv==='')return null;
+      if(rv.toDate)return rv.toDate().toISOString();
+      if(typeof rv==='string')return rv;
+      return null;
+    })(),
     leave_type:r.leave_type||r.leaveType||'unofficial',
     place:r.place||r.destination||'—',
-    // Explicitly connect to leave_taken field from Firestore
-    leave_taken: r.leave_taken,
-    days:r.days!=null?r.days:calcDays(from,to),
+    leave_count: r.leave_count!=null?r.leave_count:null,
+    leave_taken: (r.leave_taken!=null&&r.leave_taken!==0&&r.leave_taken!==''&&r.leave_taken!=='0')?parseFloat(r.leave_taken):null,
     status:(r.status||'pending').toString().trim(),
   };
 }
 
 function startListener(){
   if(unsub){unsub();unsub=null;}
-  const q=query(collection(db,'leaveRequests'),where('adNo','==',student.id),orderBy('createdAt','desc'));
+  const q=query(collection(db,'leaveRequests'),where('adno','==',student.id),orderBy('createdAt','desc'));
   unsub=onSnapshot(q,snap=>{allLeaves=snap.docs.map(normalizeLeave);refreshUI();},()=>fallback());
+
+  // Real-time listener on student doc — keeps stats cards synced with Firestore
+  if(unsubStudent){unsubStudent();unsubStudent=null;}
+  unsubStudent=onSnapshot(doc(db,'students',student.id),snap=>{
+    if(!snap.exists())return;
+    const data=snap.data();
+    student.total_official   = data.total_official   ?? 0;
+    student.total_medical    = data.total_medical    ?? 0;
+    student.total_unofficial = data.total_unofficial ?? 0;
+    student.total_leaves     = data.total_leaves     ?? 0;
+    renderStudentCard();
+  });
 }
 function fallback(){
-  const q=query(collection(db,'leaveRequests'),where('adNo','==',student.id));
+  const q=query(collection(db,'leaveRequests'),where('adno','==',student.id));
   unsub=onSnapshot(q,snap=>{
     allLeaves=snap.docs.map(normalizeLeave).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     refreshUI();
@@ -535,9 +555,6 @@ function checkBlock(){
   banner.classList.remove('show');btn.disabled=false;
 }
 
-/* ═══════════════════════════════════════
-   HISTORY TABLE — Updated Order
-   ═══════════════════════════════════════ */
 function renderHistory(){
   const tbody=$('history-body');
   if(!allLeaves.length){
@@ -547,47 +564,24 @@ function renderHistory(){
   tbody.innerHTML=allLeaves.map((l)=>{
     const type=l.leave_type||'unofficial';
     const icon=type==='medical'?'🏥':type==='official'?'🏛':'🏠';
-
-    // Leave ID
     const leaveId=l.requestId||l.id;
 
-    // Reached datetime
-    const reachedStr=l.reached_datetime?fmtDate(l.reached_datetime):'—';
+    const d = l.leave_count!=null ? parseFloat(l.leave_count) : null;
+    const totalLeave = l.leave_taken!=null ? parseFloat(l.leave_taken) : null;
+    const totalLeaveHtml = `<span style="font-weight:800;color:var(--text)">${totalLeave!=null?totalLeave.toFixed(1):'—'}</span><span style="font-size:10px;color:var(--text-dim)"> days</span>`;
 
-    // 1. Duration Logic: Centre btwn to and reached
-    let effectiveEnd = l.to_datetime;
-    if(l.reached_datetime){
-      const t1 = new Date(l.to_datetime).getTime();
-      const t2 = new Date(l.reached_datetime).getTime();
-      const mid = (t1 + t2) / 2;
-      effectiveEnd = new Date(mid).toISOString();
-    }
-    const d = calcDays(l.from_datetime, effectiveEnd);
-
-    // 2. Total Leave Logic: Connect with 'leave_taken' field from Firestore
-    // If leave_taken exists in database, show it. If null/undefined, fallback to calculated d.
-    const finalTotalLeave = l.leave_taken !== null && l.leave_taken !== undefined ? l.leave_taken : d;
-    const totalLeaveHtml = `<span style="font-weight:800;color:var(--text)">${dispNum(finalTotalLeave)}</span><span style="font-size:10px;color:var(--text-dim)"> days</span>`;
-
-    // NEW ORDER: Leave ID, Type, Place, From, To, Duration, Reached, Total Leave, Status
     return `<tr>
       <td><span class="leave-id-cell">#${leaveId}</span></td>
       <td style="font-weight:600">${icon} ${cap(type)}</td>
       <td>${l.place||'—'}</td>
       <td style="white-space:nowrap;color:var(--text-dim);font-size:11px">${fmtDate(l.from_datetime)}</td>
       <td style="white-space:nowrap;color:var(--text-dim);font-size:11px">${fmtDate(l.to_datetime)}</td>
-      
-      <!-- Duration Column (Midpoint Logic) -->
       <td>
-        <span style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:900;color:var(--blue-mid)">${dispNum(d)}</span>
-        <span style="color:var(--text-dim);font-size:10px;font-weight:600"> day${d!==1?'s':''}</span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:900;color:var(--blue-mid)">${d!=null?d.toFixed(1):'—'}</span>
+        <span style="color:var(--text-dim);font-size:10px;font-weight:600">${d!=null?' days':''}</span>
       </td>
-
-      <td style="white-space:nowrap;font-size:11px;font-weight:600;color:${l.reached_datetime?'var(--text)':'var(--text-dim)'}">${reachedStr}</td>
-      
-      <!-- Total Leave Column (Connected to Firestore 'leave_taken') -->
+      <td style="white-space:nowrap;font-size:11px;font-weight:600;color:${l.reached_datetime?'var(--text)':'var(--text-dim)'}">${l.reached_datetime?fmtDate(l.reached_datetime):'—'}</td>
       <td>${totalLeaveHtml}</td>
-      
       <td>${statusTag(l.status)}</td>
     </tr>`;
   }).join('');
@@ -601,14 +595,7 @@ function renderActiveStatus(){
     return;
   }
   wrap.innerHTML=active.map(l=>{
-    let effectiveEnd = l.to_datetime;
-    if(l.reached_datetime){
-      const t1 = new Date(l.to_datetime).getTime();
-      const t2 = new Date(l.reached_datetime).getTime();
-      effectiveEnd = new Date((t1 + t2) / 2).toISOString();
-    }
-    const d = calcDays(l.from_datetime, effectiveEnd);
-
+    const d = l.leave_count!=null ? parseFloat(l.leave_count) : null;
     const type=l.leave_type||'unofficial';
     const tIcon=type==='medical'?'🏥':type==='official'?'🏛':'🏠';
     const isApproved=l.status==='approved';
@@ -630,7 +617,7 @@ function renderActiveStatus(){
         <div class="meta-box">
           <div class="mb-lbl">⏱ Duration</div>
           <div class="mb-val" style="color:var(--blue-mid);font-family:'Montserrat',sans-serif;font-size:20px;font-weight:900;letter-spacing:-0.5px">
-            ${dispNum(d)}<span style="font-size:11px;font-weight:600;color:var(--text-dim)"> day${d!==1?'s':''}</span>
+            ${d!=null?d.toFixed(1):'—'}<span style="font-size:11px;font-weight:600;color:var(--text-dim)">${d!=null?' days':''}</span>
           </div>
         </div>
       </div>
@@ -656,12 +643,12 @@ window.submitLeave=async()=>{
   showLoader();
   try{
     const requestId=await getNextRequestId();
-    const days=calcDays(from,to);
+    const leave_count=calcDays(from,to);
     await setDoc(doc(db,'leaveRequests',requestId),{
-      adNo:student.id,name:student.name,class:student.class,adno:student.id,
+      adno:student.id,name:student.name,class:student.class,
       leave_type:'unofficial',place,reason,
-      from_datetime:from,to_datetime:to,days,
-      status:'pending',lateDays:0,createdAt:serverTimestamp(),requestId
+      from_datetime:from,to_datetime:to,leave_count,
+      status:'pending',createdAt:serverTimestamp(),requestId
     });
     toast('Leave application submitted! ✅','success');
     $('f-place').value='';$('f-reason').value='';
@@ -753,7 +740,7 @@ function calcHalfDays(f,t){
 
 function fmtDate(d){
   if(!d)return '—';
-  const dt=new Date(d);if(isNaN(dt.getTime()))return '—';
+  const dt=new Date(d);if(isNaN(dt.getTime()))return String(d);
   const day=String(dt.getDate()).padStart(2,'0');
   const mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][dt.getMonth()];
   const h=String(dt.getHours()).padStart(2,'0');
@@ -780,6 +767,7 @@ window.switchTab=(tab,btn)=>{
 
 window.logout=()=>{
   if(unsub){unsub();unsub=null;}
+  if(unsubStudent){unsubStudent();unsubStudent=null;}
   student=null;allLeaves=[];
   $('login-adno').value='';
   $('hdr-logout').classList.remove('show');
