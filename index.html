@@ -619,7 +619,6 @@ function renderActiveStatus(){
         </div>
       </div>
       ${l.reason?`<div class="reason-box">"${l.reason}"</div>`:''}
-      ${isApproved?`<div style="margin-top:14px;display:flex;justify-content:flex-end"><button class="btn btn-blue btn-sm" onclick="openExtendLeave('${l.id}')">🔁 Extend Leave</button></div>`:''}
     </div>`;
   }).join('');
 }
@@ -758,7 +757,7 @@ function fmtTs(ts){
   const d=ts.toDate?ts.toDate():new Date(ts.seconds*1000);
   return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 }
-function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):'';}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1).toLowerCase():'';}
 function statusTag(s){
   const m={pending:['t-yellow','⏳ Pending'],approved:['t-green','✅ Approved'],completed:['t-grey','🏁 Completed'],rejected:['t-red','❌ Rejected']};
   const[cls,label]=m[s]||['t-grey',cap(s)];
