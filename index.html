@@ -402,7 +402,6 @@ import {
   onSnapshot, serverTimestamp, increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ── NEW FIREBASE PROJECT: leave-reports ──────────────────────────────────────
 const app = initializeApp({
   apiKey:            "AIzaSyACe-Wd7Lw18UqEJVFeFrM-Jw6Ml2Xbcws",
   authDomain:        "leave-reports.firebaseapp.com",
@@ -412,7 +411,6 @@ const app = initializeApp({
   appId:             "1:542083419531:web:2235f6d012cd194f0bf38e",
   measurementId:     "G-6V8DSMTDGG"
 });
-// ─────────────────────────────────────────────────────────────────────────────
 
 const db = getFirestore(app);
 
@@ -501,7 +499,6 @@ function startListener(){
   const q=query(collection(db,'leaveRequests'),where('adno','==',student.id),orderBy('createdAt','desc'));
   unsub=onSnapshot(q,snap=>{allLeaves=snap.docs.map(normalizeLeave);refreshUI();},()=>fallback());
 
-  // Real-time listener on student doc — keeps stats cards synced with Firestore
   if(unsubStudent){unsubStudent();unsubStudent=null;}
   unsubStudent=onSnapshot(doc(db,'students',student.id),snap=>{
     if(!snap.exists())return;
@@ -710,33 +707,42 @@ window.updateDays=()=>{
 };
 
 function calcDays(f,t){if(!f||!t)return 0;return calcHalfDays(f,t);}
+
+// ── FIXED: Only count a session if the student was FULLY absent for it ────────
+// A session is counted (0.5 days) only when:
+//   leave_start <= session_start  AND  leave_end >= session_end
+// i.e. the leave completely covers the session window.
+// If the student is present for even one second of the session → 0 for that session.
 function calcHalfDays(f,t){
   const s=new Date(f),e=new Date(t);
   if(isNaN(s.getTime())||isNaN(e.getTime())||e<s)return 0;
   let tot=0;
   const cur=new Date(s);cur.setHours(0,0,0,0);
   const last=new Date(e);last.setHours(0,0,0,0);
-  const ov=(a,b,c,d)=>a<d&&b>c;
   while(cur<=last){
     const day=cur.getDay();
     let p1s,p1e,p2s,p2e;
     if(day===5){
+      // Friday sessions
       p1s=new Date(cur);p1s.setHours(0,0,0,0);
       p1e=new Date(cur);p1e.setHours(0,20,0,0);
       p2s=new Date(cur);p2s.setHours(19,30,0,0);
       p2e=new Date(cur);p2e.setHours(19,50,0,0);
     }else{
+      // Normal days
       p1s=new Date(cur);p1s.setHours(7,30,0,0);
       p1e=new Date(cur);p1e.setHours(7,50,0,0);
       p2s=new Date(cur);p2s.setHours(13,40,0,0);
       p2e=new Date(cur);p2e.setHours(14,10,0,0);
     }
-    if(ov(s,e,p1s,p1e))tot+=0.5;
-    if(ov(s,e,p2s,p2e))tot+=0.5;
+    // Count only if leave FULLY covers the session (student missed 100% of it)
+    if(s<=p1s && e>=p1e) tot+=0.5;
+    if(s<=p2s && e>=p2e) tot+=0.5;
     cur.setDate(cur.getDate()+1);
   }
   return tot;
 }
+// ─────────────────────────────────────────────────────────────────────────────
 
 function fmtDate(d){
   if(!d)return '—';
