@@ -36,7 +36,6 @@ header{
   box-shadow:0 4px 24px rgba(13,71,161,0.35);
   min-height:68px;display:flex;align-items:stretch;
 }
-/* Geometric SVG background in header */
 header::before{
   content:'';position:absolute;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -142,6 +141,22 @@ main{max-width:1080px;margin:0 auto;padding:32px 20px 90px}
   cursor:not-allowed;box-shadow:none;
 }
 .btn-sm{width:auto;padding:8px 16px;font-size:11px;border-radius:8px}
+.btn-danger{
+  background:var(--red-bg);color:var(--red);
+  border:1.5px solid var(--red-border);box-shadow:none;
+}
+.btn-danger:hover:not(:disabled){
+  background:var(--red);color:#fff;
+  transform:translateY(-1px);box-shadow:0 4px 14px rgba(192,57,43,0.3);
+}
+.btn-warn{
+  background:var(--amber-bg);color:var(--amber);
+  border:1.5px solid var(--amber-border);box-shadow:none;
+}
+.btn-warn:hover:not(:disabled){
+  background:#EDD580;color:var(--amber);
+  transform:translateY(-1px);
+}
 
 /* ═══ STUDENT CARD ═══ */
 .student-card{
@@ -297,6 +312,25 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
 .t-grey{background:var(--bg);color:var(--text-dim);border:1px solid var(--border)}
 .t-orange{background:#FFF3E0;color:#C25A00;border:1px solid #F5C28A}
 
+/* ═══ ACTION BUTTONS IN TABLE ═══ */
+.action-btns{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
+.act-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 11px;border-radius:7px;border:1.5px solid;
+  font-size:10px;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;letter-spacing:0.3px;
+  transition:all .18s;white-space:nowrap;
+  background:transparent;
+}
+.act-btn-edit{
+  color:#1565C0;border-color:#BBDEFB;background:#E8F0FE;
+}
+.act-btn-edit:hover{background:#1565C0;color:#fff;border-color:#1565C0;transform:translateY(-1px)}
+.act-btn-delete{
+  color:var(--red);border-color:var(--red-border);background:var(--red-bg);
+}
+.act-btn-delete:hover{background:var(--red);color:#fff;border-color:var(--red);transform:translateY(-1px)}
+
 /* ═══ ACTIVE CARD ═══ */
 .active-card{
   background:#fff;border:1.5px solid var(--border);
@@ -322,6 +356,10 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
 .reason-box::before{
   content:'"';font-family:'Playfair Display',serif;font-size:36px;
   color:var(--border);position:absolute;top:-4px;left:12px;line-height:1;
+}
+.active-card-actions{
+  display:flex;gap:10px;margin-top:16px;padding-top:16px;
+  border-top:1.5px dashed var(--border);
 }
 
 /* ═══ LEAVE ID CELL ═══ */
@@ -364,6 +402,63 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
 #toast.error{background:var(--red);color:#fff}
 #toast.info{background:#1976D2;color:#fff}
 
+/* ═══ MODAL ═══ */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(10,25,41,0.55);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.show{display:flex;animation:fadeIn .2s ease}
+.modal-box{
+  background:#fff;border-radius:var(--radius-xl);
+  border:1.5px solid var(--border);
+  box-shadow:var(--shadow-lg);width:100%;max-width:500px;
+  overflow:hidden;animation:fadeUp .3s ease;
+}
+.modal-header{
+  background:linear-gradient(160deg,#0D47A1 0%,#1565C0 100%);
+  padding:20px 24px;display:flex;align-items:center;gap:12px;
+}
+.modal-header h3{
+  font-family:'Playfair Display',serif;font-size:17px;font-weight:700;
+  color:#fff;flex:1;
+}
+.modal-close{
+  background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
+  color:#fff;width:30px;height:30px;border-radius:8px;
+  cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;font-family:'DM Sans',sans-serif;
+}
+.modal-close:hover{background:rgba(255,255,255,0.22)}
+.modal-body{padding:24px}
+.modal-footer{
+  display:flex;gap:10px;padding:0 24px 24px;justify-content:flex-end;
+}
+.modal-footer .btn{width:auto;padding:10px 22px}
+
+/* ═══ CONFIRM DIALOG ═══ */
+.confirm-overlay{
+  display:none;position:fixed;inset:0;z-index:300;
+  background:rgba(10,25,41,0.65);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.confirm-overlay.show{display:flex;animation:fadeIn .2s ease}
+.confirm-box{
+  background:#fff;border-radius:var(--radius-lg);
+  border:1.5px solid var(--red-border);
+  box-shadow:0 12px 48px rgba(192,57,43,0.2);
+  width:100%;max-width:380px;padding:28px;text-align:center;
+  animation:fadeUp .3s ease;
+}
+.confirm-icon{font-size:44px;margin-bottom:12px;display:block}
+.confirm-box h4{
+  font-family:'Playfair Display',serif;font-size:18px;font-weight:700;
+  color:var(--text);margin-bottom:8px;
+}
+.confirm-box p{font-size:13px;color:var(--text-dim);line-height:1.7;margin-bottom:22px}
+.confirm-actions{display:flex;gap:10px}
+.confirm-actions .btn{flex:1;padding:11px}
+
 /* ═══ DIVIDER ═══ */
 .ornament-divider{
   display:flex;align-items:center;gap:12px;margin:10px 0 24px;
@@ -371,12 +466,11 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
 .ornament-divider::before,.ornament-divider::after{
   content:'';flex:1;height:1px;background:var(--border);
 }
-.ornament-divider span{
-  font-size:14px;color:var(--gold);
-}
+.ornament-divider span{font-size:14px;color:var(--gold)}
 
 /* ═══ KEYFRAMES ═══ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pdot{
   0%{box-shadow:0 0 0 0 rgba(74,224,140,.6)}
@@ -389,6 +483,7 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
   .hdr-inner{padding:0 16px}
   .student-card{flex-direction:column;align-items:flex-start;gap:12px}
   .status-badge{align-self:flex-start}
+  .active-card-actions{flex-direction:column}
 }
 @media(max-width:380px){
   .hdr-sub{display:none}
@@ -538,10 +633,11 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
                 <th>Reached</th>
                 <th>Total Leave</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="history-body">
-              <tr><td colspan="9"><div class="empty-state"><span class="ei">⏳</span>Loading...</div></td></tr>
+              <tr><td colspan="10"><div class="empty-state"><span class="ei">⏳</span>Loading...</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -558,13 +654,67 @@ tbody td{padding:12px 14px;color:var(--text);vertical-align:middle;font-weight:5
   </div>
 </main>
 
+<!-- ═══ EDIT MODAL ═══ -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span style="font-size:20px">✏️</span>
+      <h3>Edit Pending Leave</h3>
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-doc-id"/>
+      <div class="field">
+        <label>Place / Location</label>
+        <input type="text" id="edit-place" placeholder="Where are you going?"/>
+      </div>
+      <div class="field">
+        <label>Reason</label>
+        <textarea id="edit-reason" placeholder="Describe your reason for leave..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>From Date &amp; Time</label>
+          <input type="datetime-local" id="edit-from_datetime" onchange="updateEditDays()"/>
+        </div>
+        <div class="field">
+          <label>To Date &amp; Time</label>
+          <input type="datetime-local" id="edit-to_datetime" onchange="updateEditDays()"/>
+        </div>
+      </div>
+      <div class="duration-box">
+        <div class="dur-val" id="edit-days">—</div>
+        <div class="dur-lbl">Calculated leave duration<br><span style="font-size:10px;color:var(--slate)">Based on session schedule</span></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-warn btn-sm" onclick="closeEditModal()" style="width:auto;padding:10px 20px">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditLeave()" style="width:auto;padding:10px 24px">💾 Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONFIRM DELETE DIALOG ═══ -->
+<div class="confirm-overlay" id="confirm-modal">
+  <div class="confirm-box">
+    <span class="confirm-icon">🗑️</span>
+    <h4>Delete Leave Request?</h4>
+    <p>This action cannot be undone. Your pending leave application will be permanently removed.</p>
+    <input type="hidden" id="confirm-doc-id"/>
+    <div class="confirm-actions">
+      <button class="btn btn-warn" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
 <div id="loader"><div class="spinner"></div></div>
 <div id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getFirestore, doc, getDoc, getDocs, setDoc, updateDoc,
+  getFirestore, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
   collection, query, where, orderBy,
   onSnapshot, serverTimestamp, increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -713,7 +863,7 @@ function checkBlock(){
   }
   if(hasPending){
     banner.classList.add('show');
-    $('block-reason').textContent='You have a pending request. Wait for admin decision first.';
+    $('block-reason').textContent='You have a pending request. You may edit or delete it below.';
     btn.disabled=true;return;
   }
   banner.classList.remove('show');btn.disabled=false;
@@ -722,7 +872,7 @@ function checkBlock(){
 function renderHistory(){
   const tbody=$('history-body');
   if(!allLeaves.length){
-    tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><span class="ei">📋</span><p>No leave records yet.</p></div></td></tr>`;
+    tbody.innerHTML=`<tr><td colspan="10"><div class="empty-state"><span class="ei">📋</span><p>No leave records yet.</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML=allLeaves.map((l)=>{
@@ -732,6 +882,13 @@ function renderHistory(){
     const d = l.leave_count!=null ? parseFloat(l.leave_count) : null;
     const totalLeave = l.leave_taken!=null ? parseFloat(l.leave_taken) : null;
     const totalLeaveHtml = `<span style="font-weight:700;color:var(--text)">${totalLeave!=null?totalLeave.toFixed(1):'—'}</span><span style="font-size:10px;color:var(--text-dim)"> days</span>`;
+    const isPending = l.status==='pending';
+    const actionsHtml = isPending
+      ? `<div class="action-btns">
+           <button class="act-btn act-btn-edit" onclick="openEditModal('${l.id}')">✏️ Edit</button>
+           <button class="act-btn act-btn-delete" onclick="openDeleteConfirm('${l.id}')">🗑️ Delete</button>
+         </div>`
+      : `<span style="font-size:10px;color:var(--text-dim);font-style:italic">—</span>`;
     return `<tr>
       <td><span class="leave-id-cell">#${leaveId}</span></td>
       <td style="font-weight:600">${icon} ${cap(type)}</td>
@@ -745,6 +902,7 @@ function renderHistory(){
       <td style="white-space:nowrap;font-size:11px;font-weight:600;color:${l.reached_datetime?'var(--text)':'var(--text-dim)'}">${l.reached_datetime?fmtDate(l.reached_datetime):'—'}</td>
       <td>${totalLeaveHtml}</td>
       <td>${statusTag(l.status)}</td>
+      <td>${actionsHtml}</td>
     </tr>`;
   }).join('');
 }
@@ -761,7 +919,13 @@ function renderActiveStatus(){
     const type=l.leave_type||'unofficial';
     const tIcon=type==='medical'?'🏥':type==='official'?'🏛':'🏠';
     const isApproved=l.status==='approved';
+    const isPending=l.status==='pending';
     const accentColor=isApproved?'var(--green)':'var(--gold)';
+    const pendingActions = isPending ? `
+      <div class="active-card-actions">
+        <button class="btn btn-warn btn-sm" onclick="openEditModal('${l.id}')">✏️ Edit This Request</button>
+        <button class="btn btn-danger btn-sm" onclick="openDeleteConfirm('${l.id}')">🗑️ Delete This Request</button>
+      </div>` : '';
     return `
     <div class="active-card ${isApproved?'approved':'pending'}">
       <div class="active-card-header">
@@ -784,10 +948,93 @@ function renderActiveStatus(){
         </div>
       </div>
       ${l.reason?`<div class="reason-box"><span style="padding-left:12px">${l.reason}</span></div>`:''}
+      ${pendingActions}
     </div>`;
   }).join('');
 }
 
+/* ══════════════════════════════════════
+   EDIT MODAL
+══════════════════════════════════════ */
+window.openEditModal=(docId)=>{
+  const l=allLeaves.find(x=>x.id===docId);
+  if(!l||l.status!=='pending'){toast('Only pending leaves can be edited','error');return;}
+  $('edit-doc-id').value=docId;
+  $('edit-place').value=l.place||'';
+  $('edit-reason').value=l.reason||'';
+  $('edit-from_datetime').value=l.from_datetime||'';
+  $('edit-to_datetime').value=l.to_datetime||'';
+  updateEditDays();
+  $('edit-modal').classList.add('show');
+};
+
+window.closeEditModal=()=>{$('edit-modal').classList.remove('show');};
+
+window.updateEditDays=()=>{
+  const f=$('edit-from_datetime').value,t=$('edit-to_datetime').value;
+  const el=$('edit-days');
+  if(f&&t&&new Date(t)>=new Date(f)){
+    const d=calcDays(f,t);el.textContent=dispNum(d)+' day'+(d!==1?'s':'');
+  }else{el.textContent='—';}
+};
+
+window.saveEditLeave=async()=>{
+  const docId=$('edit-doc-id').value;
+  const place=$('edit-place').value.trim();
+  const reason=$('edit-reason').value.trim();
+  const from=$('edit-from_datetime').value;
+  const to=$('edit-to_datetime').value;
+  if(!place){toast('Please enter place / location','error');return;}
+  if(!reason){toast('Please enter reason for leave','error');return;}
+  if(!from){toast('Please select From date and time','error');return;}
+  if(!to){toast('Please select To date and time','error');return;}
+  if(new Date(to)<new Date(from)){toast('To cannot be before From','error');return;}
+  // Check overlap (exclude self)
+  const overlap=allLeaves.some(l=>{
+    if(l.id===docId)return false;
+    if(l.status==='completed'||l.status==='rejected')return false;
+    return !(new Date(to)<new Date(l.from_datetime)||new Date(from)>new Date(l.to_datetime));
+  });
+  if(overlap){toast('Dates overlap with another leave','error');return;}
+  const leave_count=calcDays(from,to);
+  showLoader();
+  try{
+    await updateDoc(doc(db,'leaveRequests',docId),{
+      place,reason,from_datetime:from,to_datetime:to,leave_count
+    });
+    closeEditModal();
+    toast('Leave request updated successfully ✅','success');
+  }catch(e){console.error(e);toast('Failed to update. Try again.','error');}
+  hideLoader();
+};
+
+/* ══════════════════════════════════════
+   DELETE CONFIRM
+══════════════════════════════════════ */
+window.openDeleteConfirm=(docId)=>{
+  const l=allLeaves.find(x=>x.id===docId);
+  if(!l||l.status!=='pending'){toast('Only pending leaves can be deleted','error');return;}
+  $('confirm-doc-id').value=docId;
+  $('confirm-modal').classList.add('show');
+};
+
+window.closeConfirmModal=()=>{$('confirm-modal').classList.remove('show');};
+
+window.confirmDelete=async()=>{
+  const docId=$('confirm-doc-id').value;
+  if(!docId)return;
+  closeConfirmModal();
+  showLoader();
+  try{
+    await deleteDoc(doc(db,'leaveRequests',docId));
+    toast('Leave request deleted','info');
+  }catch(e){console.error(e);toast('Failed to delete. Try again.','error');}
+  hideLoader();
+};
+
+/* ══════════════════════════════════════
+   SUBMIT LEAVE
+══════════════════════════════════════ */
 window.submitLeave=async()=>{
   const place=$('f-place').value.trim(),reason=$('f-reason').value.trim();
   const from=$('f-from_datetime').value,to=$('f-to_datetime').value;
@@ -819,35 +1066,6 @@ window.submitLeave=async()=>{
   hideLoader();
 };
 
-window.openExtendLeave=async(docId)=>{
-  const leave=allLeaves.find(l=>l.id===docId);if(!leave)return;
-  const currentTo=leave.to_datetime||'';
-  const newTo=prompt(`Extend leave\nCurrent To: ${currentTo}\nNew To (YYYY-MM-DDTHH:MM):`);
-  if(!newTo)return;
-  const newToDate=new Date(newTo);
-  if(isNaN(newToDate.getTime())){toast('Invalid datetime format','error');return;}
-  if(newToDate<=new Date(leave.from_datetime)){toast('New To must be after From','error');return;}
-  if(newToDate<=new Date(currentTo)){toast('New To must be later than current To','error');return;}
-  const reason=prompt('Reason for extension:');
-  if(!reason){toast('Extension reason required','error');return;}
-  const oldDays=calcDays(leave.from_datetime,leave.to_datetime);
-  const extDays=calcDays(leave.from_datetime,newTo);
-  const extra=extDays-oldDays;
-  const lt=leave.leave_type||'unofficial';
-  const field=lt==='medical'?'total_medical':lt==='official'?'total_official':'total_unofficial';
-  const updReason=leave.reason?`${leave.reason} | Extension: ${reason}`:reason;
-  showLoader();
-  try{
-    await updateDoc(doc(db,'leaveRequests',docId),{to_datetime:newTo,reason:updReason,days:extDays});
-    if(extra>0){
-      await updateDoc(doc(db,'students',student.id),{[field]:increment(extra)});
-      student[field]=+(student[field]||0)+extra;renderStudentCard();
-    }
-    toast('Leave extended!','success');
-  }catch(e){console.error(e);toast('Failed to extend leave','error');}
-  hideLoader();
-};
-
 async function getNextRequestId(){
   const snap=await getDocs(collection(db,'leaveRequests'));
   const max=snap.docs.map(d=>parseInt(d.id,10)).filter(n=>!isNaN(n)).reduce((m,n)=>Math.max(m,n),0);
@@ -871,7 +1089,6 @@ window.updateDays=()=>{
 };
 
 function calcDays(f,t){if(!f||!t)return 0;return calcHalfDays(f,t);}
-
 function calcHalfDays(f,t){
   const s=new Date(f),e=new Date(t);
   if(isNaN(s.getTime())||isNaN(e.getTime())||e<s)return 0;
@@ -899,7 +1116,6 @@ function calcHalfDays(f,t){
   return tot;
 }
 
-/* ── AM/PM date formatter ── */
 function fmtDate(d){
   if(!d)return '—';
   const dt=new Date(d);if(isNaN(dt.getTime()))return String(d);
@@ -945,6 +1161,10 @@ window.logout=()=>{
   showScreen('screen-login');
   toast('Signed out','info');
 };
+
+/* Close modals on overlay click */
+$('edit-modal').addEventListener('click',e=>{if(e.target===$('edit-modal'))closeEditModal();});
+$('confirm-modal').addEventListener('click',e=>{if(e.target===$('confirm-modal'))closeConfirmModal();});
 </script>
 </body>
 </html>
